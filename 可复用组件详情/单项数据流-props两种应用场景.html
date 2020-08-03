@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>组件使用方法</title>
+    <style>
+      #app {
+        border: 2px solid black;
+        width: 600px;
+        height: 300px;
+        font-weight: 700;
+        font-size: 16px;
+        padding: 3px;
+        margin: 0 auto;
+        margin-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <my-component msg="我是父组件传递的数据"></my-component>
+      <hr />
+      <!-- 需求：在input里输入数值改变width -->
+      <input type="text" v-model="width" />
+      <width-component :width="width"></width-component>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script>
+      //注册组件
+      //将传递进来的数据作为初始值保存
+      Vue.component("my-component", {
+        props: ["msg"],
+        template: "<div>{{count}}</div>",
+        data() {
+          return {
+            //props中的数据可以直接用this.xxx直接获取
+            count: this.msg,
+          };
+        },
+      });
+
+      Vue.component("width-component", {
+        props: ["width"],
+        template: "<div :style='style'></div>",
+        data() {
+          return {};
+        },
+        computed: {
+          style() {
+            return {
+              width: this.width + "px",
+              background: "red",
+              height: "30px",
+            };
+          },
+        },
+      });
+
+      new Vue({
+        el: "#app",
+        data: {
+          width: 0,
+        },
+      });
+    </script>
+  </body>
+</html>

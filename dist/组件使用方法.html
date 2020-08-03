@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件使用方法</title>
+  </head>
+  <body>
+    <div id="app">
+      <my-component></my-component>
+      <hr>
+    </div>
+    <div id="bpp">
+      <table>
+        <!-- <bpp-component></bpp-component> -->
+        <tbody is="bpp-component"></tbody>
+      </table>
+      <hr>
+      <button @click="count">{{countNum}}</button>
+      <button @click="count">{{countNum}}</button>
+      <hr>
+      <btn-component></btn-component>
+      <btn-component></btn-component>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script>//Vue.component(tag,{
+//template:'<div></div>'
+//})
+Vue.component("my-component", {
+  template: "<div>我是组件内容</div>"
+});
+var app = new Vue({
+  el: "#app"
+}); //全局注册
+
+Vue.component("my-component", {
+  template: "<div>我是组件内容</div>"
+});
+var bpp = new Vue({
+  el: "#bpp",
+  data: {
+    countNum: 0
+  },
+  components: {
+    "bpp-component": {
+      template: "<div>bpp的局部组件</div>"
+    },
+    //局部注册
+    "btn-component": {
+      template: "<button @click='countNum++'>{{countNum}}</button>",
+      data: function data() {
+        return {
+          countNum: 0
+        };
+      }
+    }
+  },
+  methods: {
+    count: function count() {
+      this.countNum += 1;
+    }
+  }
+});</script>
+  </body>
+</html>

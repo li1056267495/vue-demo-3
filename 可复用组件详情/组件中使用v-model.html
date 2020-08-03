@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>组件使用方法</title>
+    <style>
+      #app {
+        border: 2px solid black;
+        width: 600px;
+        height: 300px;
+        font-weight: 700;
+        font-size: 16px;
+        padding: 3px;
+        margin: 0 auto;
+        margin-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      你的余额还有{{money}}
+      <!-- v-model是一个语法糖，首先用v-bind绑定一个value属性，再用v-on指令给当前元素绑定一个input事件 -->
+      <son-component v-model="money"></son-component>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script>
+      Vue.component("son-component", {
+        template:
+          ' <div>\
+        <button @click="handTel1">+1000</button>\
+        </div>',
+        data() {
+          return {
+            count: 2000,
+          };
+        },
+        methods: {
+          handTel1() {
+            this.count += 1000;
+
+            this.$emit("input", this.count);
+          },
+        },
+      });
+      new Vue({
+        el: "#app",
+        data: {
+          money: 2000,
+        },
+        methods: {},
+      });
+    </script>
+  </body>
+</html>

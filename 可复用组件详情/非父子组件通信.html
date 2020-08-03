@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>组件使用方法</title>
+    <style>
+      #app {
+        border: 2px solid black;
+        width: 600px;
+        height: 300px;
+        font-weight: 700;
+        font-size: 16px;
+        padding: 3px;
+        margin: 0 auto;
+        margin-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <my-component1 ref="a"></my-component1>
+      <my-component2 ref="b"></my-component2>
+      <hr />
+      <child-component ref="c"></child-component>---{{msg}}
+      <hr>
+      <button @click='getChildData'>点击我拿子组件数据</button>---{{fromChild}}
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script>
+      Vue.component("my-component1", {
+        template: "<button @click='handle'>点击我传向组件2</button>",
+        data() {
+          return {
+            a: "我是来组组件1",
+            msg:"我是组件1的信息"
+          };
+        },
+        methods: {
+          handle() {
+            //点击 组件1 button 时触发跟组件bus实例建立，并把数据传给bus
+            this.$root.bus.$emit("la", this.a);
+          },
+        },
+      });
+      Vue.component("my-component2", {
+        template: "",
+        data(){
+            return{
+                msg:"我是组件2的信息"
+            }
+        },
+        created() {
+          //bus实例创建时候监听事件
+          this.$root.bus.$on("la", function (value) {
+            alert(value);
+          });
+        },
+      });
+      //子组件修改父组件内容（多个子组件）
+      Vue.component("child-component", {
+        template: "<button @click='getFatherData'>点击我修改父组件数据</button>",
+        data() {
+            return{
+                msg:"我是组件3的信息"
+            }
+        },
+        methods: {
+            getFatherData() {
+            this.$parent.msg = "数据已经修改了"; //(父链)
+          },
+        },
+      });
+
+      new Vue({
+        el: "#app",
+        data: {
+          //bus 中介
+          bus: new Vue(),
+          msg: "数据还没修改",
+          fromChild:"还没拿到"
+        },
+        methods:{
+            getChildData(){
+               this.fromChild = this.$refs.b.msg
+            }
+        }
+      });
+    </script>
+  </body>
+</html>
